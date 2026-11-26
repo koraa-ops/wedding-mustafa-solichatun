@@ -53,7 +53,7 @@ export const weddingData = {
   },
 
   firebase: {
-    projectId: '', // Diisi Project ID Firebase (misal: 'mustafa-chaca-wedding')
+    projectId: 'wedding-mustafa-chaca',
   },
 
   groom: {
