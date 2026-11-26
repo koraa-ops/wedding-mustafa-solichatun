@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { Send, MessageSquareHeart, CheckCircle, HelpCircle, XCircle } from 'lucide-react';
 import { weddingData, type WishMessage } from '../../config/weddingData';
+import { saveWishToFirebase, fetchWishesFromFirebase } from '../../services/firebaseService';
 
 interface RsvpSectionProps {
   initialGuestName?: string;
@@ -16,18 +17,47 @@ export function RsvpSection({ initialGuestName = '', onSuccessToast }: RsvpSecti
   const [message, setMessage] = useState('');
   const [wishes, setWishes] = useState<WishMessage[]>([]);
 
-  // Load saved wishes from localStorage or fall back to weddingData.initialWishes
+  // Load wishes from Firebase Firestore with fallback to localStorage / default
   useEffect(() => {
-    const saved = localStorage.getItem('wedding_wishes');
-    if (saved) {
-      try {
-        setWishes(JSON.parse(saved));
-      } catch {
+    let isMounted = true;
+
+    const loadWishes = async () => {
+      // 1. Try Firebase first
+      const remoteWishes = await fetchWishesFromFirebase();
+      if (!isMounted) return;
+
+      if (remoteWishes && remoteWishes.length > 0) {
+        setWishes(remoteWishes);
+        localStorage.setItem('wedding_wishes', JSON.stringify(remoteWishes));
+        return;
+      }
+
+      // 2. Fallback to localStorage or weddingData.initialWishes
+      const saved = localStorage.getItem('wedding_wishes');
+      if (saved) {
+        try {
+          setWishes(JSON.parse(saved));
+        } catch {
+          setWishes(weddingData.initialWishes);
+        }
+      } else {
         setWishes(weddingData.initialWishes);
       }
-    } else {
-      setWishes(weddingData.initialWishes);
-    }
+    };
+
+    loadWishes();
+
+    // Auto-poll Firebase every 25 seconds for new wishes from other guests
+    const pollInterval = setInterval(() => {
+      if (weddingData.firebase?.projectId) {
+        loadWishes();
+      }
+    }, 25000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(pollInterval);
+    };
   }, []);
 
   // Update name if initialGuestName changes or read directly from URL query
@@ -122,7 +152,10 @@ export function RsvpSection({ initialGuestName = '', onSuccessToast }: RsvpSecti
     setWishes(updatedWishes);
     localStorage.setItem('wedding_wishes', JSON.stringify(updatedWishes));
 
-    // Send Real-Time Push Notification to Telegram Bot
+    // 1. Save to Firebase Cloud Firestore (Public Guestbook)
+    saveWishToFirebase(name.trim(), trimmedMsg, attendance, pax);
+
+    // 2. Send Real-Time Push Notification to Telegram Bot
     sendTelegramNotification(name.trim(), attendance, pax, trimmedMsg);
 
     setMessage('');

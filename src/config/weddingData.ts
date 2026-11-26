@@ -52,6 +52,10 @@ export const weddingData = {
     chatId: '1849783527',
   },
 
+  firebase: {
+    projectId: '', // Diisi Project ID Firebase (misal: 'mustafa-chaca-wedding')
+  },
+
   groom: {
     nickName: 'Mustafa',
     fullName: 'Mustafa Masykur, S.Pd.',
