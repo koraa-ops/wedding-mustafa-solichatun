@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-script: 'Great Vibes', cursive;
+    --font-calligraphy: 'Alex Brush', cursive;
+    --font-cinzel: 'Cinzel', serif;
+    --font-serif: 'Playfair Display', serif;
+    --font-sans: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #fbf7f4;
+    color: #2b1b22;
+    overflow-x: hidden;
+  }
+}
+
+.font-script {
+  font-family: var(--font-script);
+}
+
+.font-calligraphy {
+  font-family: var(--font-calligraphy);
+}
+
+.font-cinzel {
+  font-family: var(--font-cinzel);
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+/* Luxury Gold & Rose Gold Gradients (Optimized for Light Fairytale Theme) */
+.gold-gradient-text {
+  background: linear-gradient(135deg, #a4732b 0%, #c99557 50%, #875c20 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.rose-gold-gradient-text {
+  background: linear-gradient(135deg, #a83248 0%, #d46377 50%, #8c2438 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-border {
+  border-image: linear-gradient(135deg, #dfa851, #f5d089, #9e6d2b) 1;
+}
+
+/* Glassmorphism Romantic Fairytale Cards (Light & Elegant) */
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 160, 83, 0.35);
+  box-shadow: 0 10px 30px -10px rgba(164, 115, 43, 0.12), 0 4px 12px rgba(164, 115, 43, 0.05);
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-card-hover:hover {
+  border-color: rgba(212, 160, 83, 0.6);
+  box-shadow: 0 15px 35px -5px rgba(164, 115, 43, 0.2), 0 6px 16px rgba(164, 115, 43, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Subtle Shimmer & Animations */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.04); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #fbf7f4;
+}
+::-webkit-scrollbar-thumb {
+  background: #d4a053;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #b58032;
+}
